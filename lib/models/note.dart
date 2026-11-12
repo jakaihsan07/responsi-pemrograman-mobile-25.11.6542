@@ -1,8 +1,27 @@
+/// Model data untuk merepresentasikan catatan kuliah.
 class Note {
-  final String id, title;
+  final String id;
+  final String title;
   final DateTime date;
-  Note({required this.id, required this.title, required this.date});
+  final String? content; 
+  Note({
+    required this.id,
+    required this.title,
+    required this.date,
+    this.content,
+  });
 
-  Map<String, dynamic> toJson() => {'id': id, 'title': title, 'date': date.toIso8601String()};
-  factory Note.fromJson(Map<String, dynamic> json) => Note(id: json['id'], title: json['title'], date: DateTime.parse(json['date']));
+  /// Mengubah metadata catatan ke format Map (JSON) 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'date': date.toIso8601String(),
+      };
+
+  /// Membuat objek Note dari Map (JSON).
+  factory Note.fromJson(Map<String, dynamic> json) => Note(
+        id: json['id'],
+        title: json['title'],
+        date: DateTime.parse(json['date']),
+      );
 }

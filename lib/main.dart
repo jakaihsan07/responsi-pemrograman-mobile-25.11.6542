@@ -12,17 +12,19 @@ void main() async {
   runApp(const MyApp());
 }
 
+/// StatefulWidget pembungkus yang mengelola mutasi state untuk AppProvider.
 class AppProviderWrapper extends StatefulWidget {
   final Widget child;
   const AppProviderWrapper({Key? key, required this.child}) : super(key: key);
+
   @override
-  _AppProviderWrapperState createState() => _AppProviderWrapperState();
+  State<AppProviderWrapper> createState() => _AppProviderWrapperState();
 }
 
 class _AppProviderWrapperState extends State<AppProviderWrapper> {
   final NoteRepository _repo = NoteRepository();
   List<Note> _notes = [];
-  
+
   Student _student = Student(
     name: 'Muhammad Jaka Ihsan',
     nim: '25.11.6542',
@@ -36,7 +38,7 @@ class _AppProviderWrapperState extends State<AppProviderWrapper> {
     _loadNotes();
   }
 
-  void _loadNotes() async {
+  Future<void> _loadNotes() async {
     final notes = await _repo.loadNoteMetadata();
     setState(() => _notes = notes);
   }
@@ -47,8 +49,8 @@ class _AppProviderWrapperState extends State<AppProviderWrapper> {
       student: _student,
       notes: _notes,
       updateStudent: (s) => setState(() => _student = s),
-      addNote: (n, c) async {
-        await _repo.addNote(n, c, _notes);
+      addNote: (note) async {
+        await _repo.addNote(note, _notes);
         setState(() {});
       },
       deleteNote: (id) async {
@@ -62,12 +64,17 @@ class _AppProviderWrapperState extends State<AppProviderWrapper> {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AppProviderWrapper(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Profil & Catatan',
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: ThemeData(
+          colorSchemeSeed: Colors.indigo,
+          useMaterial3: true,
+        ),
         home: const HomeScreen(),
       ),
     );

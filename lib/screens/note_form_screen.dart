@@ -17,10 +17,9 @@ class _NoteFormScreenState extends State<NoteFormScreen> {
   void _saveNote() {
     if (_formKey.currentState!.validate()) {
       final cleanTitle = Validators.sanitize(_titleCtrl.text);
-      final cleanContent = Validators.sanitize(_contentCtrl.text);
       
       final note = Note(id: DateTime.now().millisecondsSinceEpoch.toString(), title: cleanTitle, date: DateTime.now());
-      AppProvider.of(context)!.addNote(note, cleanContent);
+      AppProvider.of(context)!.addNote(note);
       Navigator.pop(context, true);
     }
   }
